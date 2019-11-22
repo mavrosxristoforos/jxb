@@ -4,7 +4,14 @@ description: 'Create Joomla extension zip installation files as workflow action'
 branding:
   icon: 'package'  
   color: 'blue'
-
+inputs:
+  build-file:
+    description: 'The jxb file with the instructions on how to build the extension.'
+    required: true
+    default: 'build.jxb'
+runs:
+  using: 'node12'
+  main: 'index.js'
 steps
   - uses: actions/checkout@v1
     with:
