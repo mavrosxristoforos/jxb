@@ -9,9 +9,9 @@ Joomla Extension Building Action
 
 ## Example usage
 
-uses: actions/jxb@v1
-with:
-  build-file: 'build.jxb'
+    uses: actions/jxb@v1
+      with:
+        build-file: 'build.jxb'
   
 
 ## Available Syntax for Build files
