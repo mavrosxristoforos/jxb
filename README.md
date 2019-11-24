@@ -19,3 +19,4 @@ Joomla Extension Building Action
   - `ZIPDIR:directory_to_zip`
   - `ZIPFILES:target_zip_file_name files to zip separated by space...`
   - `MINIFY:js_or_css_file_to_minify target_minified_file_in_same_directory`
+  - `RENAME:old_name new_name`
