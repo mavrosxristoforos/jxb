@@ -9,7 +9,7 @@ Joomla Extension Building Action
 
 ## Example usage
 
-    uses: mavrosxristoforos/jxb@14078631438eb70982d7cef986b024885dd562d5
+    uses: mavrosxristoforos/jxb@master
       with:
         build-file: 'build.jxb'
   

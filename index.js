@@ -5,6 +5,12 @@ try {
   // `build-file` input defined in action metadata file
   const buildFileName = core.getInput('build-file');
   console.log(`Build File: ${buildFileName}!`);
+
+  var fs = require('fs');
+ 
+  fs.readFile(${buildFileName}, 'utf8', function(err, contents) {
+    console.log(contents);
+  });
   //const time = (new Date()).toTimeString();
   //core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
