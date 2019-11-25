@@ -6,11 +6,20 @@ try {
   const buildFileName = core.getInput('build-file');
   console.log(`Build File: ${buildFileName}!`);
 
+  console.log(`Workspace: ${GITHUB_WORKSPACE}`);
+
+  var buildFile = ${GITHUB_WORKSPACE}+${buildFileName};
+  console.log(buildFile);
+
   var fs = require('fs');
- 
-  fs.readFile(${buildFileName}, 'utf8', function(err, contents) {
+  if (fs.existsSync(buildFile)) {
+    var contents = fs.readFileSync(buildFile, 'utf8');
     console.log(contents);
-  });
+  }
+  else {
+    console.log('File does not exist.');
+  }
+
   //const time = (new Date()).toTimeString();
   //core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
