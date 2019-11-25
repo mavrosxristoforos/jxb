@@ -2,7 +2,6 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 try {
-  const ignoreIncVersion = core.getInput('ignore-inc-version');
   const buildFileName = process.env.GITHUB_WORKSPACE+'/'+core.getInput('build-file', { required: true });
   var fs = require('fs');
 
@@ -15,18 +14,13 @@ try {
       var args = parts[1].split(" ");
       switch(command) {
         case "INCVERSION":
-          if (ignoreIncVersion) {
-            console.log("Ignoring INCVERSION command");
-          }
-          else {
-            console.log("Increase version of file "+args[0]);
-          }
+          console.log("Skipping INCVERSION.");
           break;
         case "DELETE":
           console.log("Delete file "+args[0]);
           break;
         case "MINIFY":
-          console.log("Minify file "+args[0]+" into "+args[1]);
+          console.log("Skipping MINIFY.");
           break;
         case "RENAME":
           console.log("Rename file "+args[0]+" into "+args[1]);
