@@ -7,10 +7,20 @@ try {
 
   console.log(`Workspace: ${process.env.GITHUB_WORKSPACE}`);
 
+  var fs = require('fs');
+
+  fs.readdir(path, function(err, items) {
+    console.log("Listing workspace directory");
+    console.log(items);
+ 
+    for (var i=0; i<items.length; i++) {
+        console.log(items[i]);
+    }
+  });
+
   var buildFile = process.env.GITHUB_WORKSPACE+'/'+buildFileName;
   console.log(buildFile);
 
-  var fs = require('fs');
   if (fs.existsSync(buildFile)) {
     var contents = fs.readFileSync(buildFile, 'utf8');
     console.log(contents);
