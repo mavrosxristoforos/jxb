@@ -8,7 +8,7 @@ try {
 
   console.log(`Workspace: ${GITHUB_WORKSPACE}`);
 
-  var buildFile = ${GITHUB_WORKSPACE}+${buildFileName};
+  var buildFile = GITHUB_WORKSPACE+buildFileName;
   console.log(buildFile);
 
   var fs = require('fs');
