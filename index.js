@@ -2,60 +2,48 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 
 try {
-  const buildFileName = core.getInput('build-file');
-  console.log(`Build File: ${buildFileName}!`);
-
-  console.log(`Workspace: ${process.env.GITHUB_WORKSPACE}`);
-
+  const ignoreIncVersion = core.getInput('ignore-inc-version');
+  const buildFileName = process.env.GITHUB_WORKSPACE+'/'+core.getInput('build-file', { required: true });
   var fs = require('fs');
 
-  fs.readdir(process.env.GITHUB_WORKSPACE, function(err, items) {
-    console.log("Listing workspace directory");
-    console.log(items);
- 
-    for (var i=0; i<items.length; i++) {
-        console.log(items[i]);
-    }
-  });
-
-  var buildFile = process.env.GITHUB_WORKSPACE+'/'+buildFileName;
-  console.log(buildFile);
-
-  if (fs.existsSync(buildFile)) {
-    var contents = fs.readFileSync(buildFile, 'utf8');
+  if (fs.existsSync(buildFileName)) {
+    var contents = fs.readFileSync(buildFileName, 'utf8');
     console.log(contents);
     var lines = contents.split("\n");
-    for (var i = lines.length - 1; i >= 0; i--) {
+    for (var i = 0; i <= lines.length - 1; i++) {
       var parts = lines[i].split(":");
       var command = parts[0];
+      var args = parts[1].split(" ");
       switch(command) {
         case "INCVERSION":
-          console.log("Increase version of file "+parts[1]);
+          if (ignoreIncVersion) {
+            console.log("Ignoring INCVERSION command");
+          }
+          else {
+            console.log("Increase version of file "+args[0]);
+          }
           break;
         case "DELETE":
-          console.log("Delete file "+parts[1]);
+          console.log("Delete file "+args[0]);
           break;
         case "MINIFY":
-          console.log("Minify file "+parts[1]+" into "+parts[2]);
+          console.log("Minify file "+args[0]+" into "+args[1]);
           break;
         case "RENAME":
-          console.log("Rename file "+parts[1]+" into "+parts[2]);
+          console.log("Rename file "+args[0]+" into "+args[1]);
           break;
         case "ZIPDIR":
-          console.log("Zip directory "+parts[1]);
+          console.log("Zip directory "+args[0]);
           break;
         case "ZIPFILES":
-          console.log("Zip Files into "+parts[1]);
+          console.log("Zip Files into "+args[0]);
           break;
       }
     }
   }
   else {
-    core.setFailed('Build File does not exist: '+buildFile);
+    core.setFailed('Build File does not exist: '+buildFileName);
   }
-
-  //const time = (new Date()).toTimeString();
-  //core.setOutput("time", time);
   // Get the JSON webhook payload for the event that triggered the workflow
   //const payload = JSON.stringify(github.context.payload, undefined, 2)
   //console.log(`The event payload: ${payload}`);

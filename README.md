@@ -1,5 +1,7 @@
 # jxb
-Joomla Extension Building Action
+Joomla Extension Continuous Deployment Action
+
+JXB allows you to build and deploy your extension, using specific instructions from a build file.
 
 ## Inputs
 
@@ -7,13 +9,16 @@ Joomla Extension Building Action
 
 **Required** The name of the file to use as a guide, for building the extension. For available syntax, please read below. Default `"build.jxb"`.
 
+### `ignore-inc-version`
+
+A boolean argument to ignore version incrementations. Build files commonly include INCVERSION commands, to increment the extension build version, but you may not want to do that when releasing the extension through this action.
+
 ## Example usage
 
     uses: mavrosxristoforos/jxb@master
       with:
         build-file: 'build.jxb'
   
-
 ## Available Syntax for Build files
   - `DELETE:file_to_delete`
   - `INCVERSION:path/to/extension_xml_file.xml`
