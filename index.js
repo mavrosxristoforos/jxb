@@ -8,7 +8,6 @@ try {
 
   if (fs.existsSync(buildFileName)) {
     var contents = fs.readFileSync(buildFileName, 'utf8');
-    console.log(contents);
     var lines = contents.split("\n");
     for (var i = 0; i <= lines.length - 1; i++) {
       var parts = lines[i].split(":");
@@ -37,6 +36,9 @@ try {
           break;
         case "ZIPFILES":
           console.log("Zip Files into "+args[0]);
+          break;
+        default:
+          console.log("Unknown command: "+command);
           break;
       }
     }

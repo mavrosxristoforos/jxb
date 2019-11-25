@@ -18,6 +18,7 @@ A boolean argument to ignore version incrementations. Build files commonly inclu
     uses: mavrosxristoforos/jxb@master
       with:
         build-file: 'build.jxb'
+        ignore-inc-version: true
   
 ## Available Syntax for Build files
   - `DELETE:file_to_delete`
