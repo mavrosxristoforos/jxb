@@ -9,7 +9,7 @@ try {
 
   var fs = require('fs');
 
-  fs.readdir(path, function(err, items) {
+  fs.readdir(process.env.GITHUB_WORKSPACE, function(err, items) {
     console.log("Listing workspace directory");
     console.log(items);
  
