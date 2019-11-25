@@ -41,7 +41,7 @@ try {
     }
   }
   else {
-    console.log('File does not exist.');
+    core.setFailed('Build File does not exist: '+buildFile);
   }
 
   //const time = (new Date()).toTimeString();
