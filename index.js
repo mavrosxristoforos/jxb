@@ -6,9 +6,9 @@ try {
   const buildFileName = core.getInput('build-file');
   console.log(`Build File: ${buildFileName}!`);
 
-  console.log(`Workspace: ${GITHUB_WORKSPACE}`);
+  console.log(`Workspace: ${process.env.GITHUB_WORKSPACE}`);
 
-  var buildFile = GITHUB_WORKSPACE+buildFileName;
+  var buildFile = process.env.GITHUB_WORKSPACE+buildFileName;
   console.log(buildFile);
 
   var fs = require('fs');
