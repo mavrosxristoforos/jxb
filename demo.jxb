@@ -1,0 +1,8 @@
+DELETE:pkg.zip
+MKDIR:test-dir
+COPY:index.js test-dir/index2.js
+RENAME:test-dir/index2.js test-dir/index.js
+ZIPDIR:test-dir
+ZIPFILES:pkg.zip test-dir.zip action.yml
+DELETE:test-dir
+DELETE:test-dir.zip

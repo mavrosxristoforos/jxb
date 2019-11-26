@@ -2,7 +2,8 @@ const core = require('@actions/core');
 const github = require('@actions/github');
 const io = require('@actions/io');
 const fs = require('fs');
-require('node-zip');
+const path = require('path');
+const zipFolder = require('folder-zip-sync');
 
 class JXBCommand {
 
@@ -12,71 +13,119 @@ class JXBCommand {
     this._args = parts[1].split(" ");
   }
 
+  async copy(sourcePath, target) {
+    console.log(`Copying file ${sourcePath} to ${target}`);
+    if (fs.existsSync(sourcePath)) {
+      try {
+        await io.cp(sourcePath, target, {recursive:true, force:true});
+        //fs.copyFileSync(sourcePath, target);
+      } catch(err) {
+        console.log(err);
+        return false;
+      }
+    }
+    else {
+      console.log(`Error: File ${this._args[0]} does not exist.`);
+      return false;
+    }
+    return true;
+  }
+
+  async delete(pathToDelete) {
+    console.log(`Deleting file ${pathToDelete}`);
+    if (fs.existsSync(pathToDelete)) {
+      try {
+        await io.rmRF(pathToDelete);
+      } catch(err) {
+        console.log(err);
+        return false;
+      }
+    }
+    else {
+      console.log(`File ${pathToDelete} does not exist. Continuing...`);
+    }
+    return true;
+  }
+
+  async mkdir(dirPath) {
+    console.log(`Creating directory ${dirPath}`);
+    try {
+      await io.mkdirP(dirPath);
+      //fs.mkdirSync(dirPath, { recursive: true });
+    } catch(err) {
+      console.log(err);
+      return false;
+    }
+    return true;
+  }
+
+  async rename(oldName, newName) {
+    console.log(`Renaming file ${oldName} into ${newName}`);
+    try {
+      fs.renameSync(oldName, newName);
+    } catch(err) {
+      console.log(err);
+      return false;
+    }
+    return true;
+  }
+
+  async zipdir(dirName, targetZipName) {
+    console.log(`Zipping directory ${dirName}`);
+    if (fs.existsSync(dirName)) {
+      zipFolder(dirName, targetZipName);
+    }
+    else {
+      console.log(`Error: File ${dirName} does not exist.`);
+      return false;
+    }
+    return true;
+  }
+
+  async zipfiles(args) {
+    console.log(`Zip Files into ${args[0]}`);
+    var result = true;
+    // Create a temporary directory
+    result = result && await this.mkdir('.jxbTmpDir');
+    // Copy all files in that directory
+    for (var i = 1; i < args.length; i++) {
+      result = result && await this.copy(args[i], '.jxbTmpDir/'+path.basename(args[i]));
+    }
+    // Zip that directory with the desired file name.
+    result = result && await this.zipdir('.jxbTmpDir', args[0]);
+    // Delete the temporary directory
+    result = result && await this.delete('.jxbTmpDir');
+    if (result) {
+      console.log(`Created file: ${args[0]}`);
+    }
+    return result;
+  }
+
   async execute() {
     switch(this._command) {
       case "COPY":
-        console.log(`Copying file ${this._args[0]} to ${this._args[1]}`);
-        if (fs.existsSync(this._args[0])) {
-          try {
-            await io.cp(this._args[0], this._args[1], {recursive:true, force:true});
-            //fs.copyFileSync(this._args[0], this._args[1]);
-          } catch(err) {
-            console.log(err);
-            return false;
-          }
-        }
-        else {
-          console.log(`Error: File ${this._args[0]} does not exist.`);
-          return false;
-        }
+        return await this.copy(this._args[0], this._args[1]);
         break;
       case "INCVERSION":
         console.log("Skipping INCVERSION. Versions must have been incremented before commiting.");
         break;
       case "DELETE":
-        console.log(`Deleting file ${this._args[0]}`);
-        if (fs.existsSync(this._args[0])) {
-          try {
-            await io.rmRF(this._args[0]);
-            //fs.unlinkSync(this._args[0]);
-          } catch(err) {
-            console.log(err);
-            return false;
-          }
-        }
-        else {
-          console.log(`File ${this._args[0]} does not exist. Continuing...`);
-        }
+        return await this.delete(this._args[0]);
         break;
       case "MINIFY":
         console.log("Skipping MINIFY. Files must have been minified before commiting.");
         break;
       case "MKDIR":
-        console.log(`Creating directory ${this._args[0]}`);
-        try {
-          await io.mkdirP(this._args[0]);
-          //fs.mkdirSync(this._args[0], { recursive: true });
-        } catch(err) {
-          console.log(err);
-          return false;
-        }
+        return await this.mkdir(this._args[0]);
         break;
       case "RENAME":
-        console.log(`Renaming file ${this._args[0]} into ${this._args[1]}`);
-        try {
-          fs.renameSync(this._args[0], this._args[1]);
-        } catch(err) {
-          console.log(err);
-          return false;
-        }
+        return await this.rename(this._args[0], this._args[1]);
         break;
       case "ZIPDIR":
-        console.log(`Zipping directory ${this._args[0]}`);
-        //var zip = new JSZip();
-
+        return await this.zipdir(this._args[0], this._args[0]+".zip");
         break;
       case "ZIPFILES":
-        console.log(`Zip Files into ${this._args[0]}`);
+        return await this.zipfiles(this._args);
         break;
       default:
         console.log(`Unknown command: ${this._command}`);
@@ -133,7 +182,7 @@ class JXB {
       }
       else {
         console.log('Build finished successfully. Thanks for using JXB.');
-        outputVersion = '1.0.0';
+        outputVersion = '1.0.0'; // TODO: Detect version
         core.setOutput('output-version', outputVersion);
       }
     }
