@@ -182,8 +182,6 @@ class JXB {
       }
       else {
         console.log('Build finished successfully. Thanks for using JXB.');
-        outputVersion = '1.0.0'; // TODO: Detect version
-        core.setOutput('output-version', outputVersion);
       }
     }
 
