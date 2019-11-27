@@ -1,4 +1,4 @@
-name: 'JXB'
+name: 'JXBuild'
 author: 'mavrosxristoforos'
 description: 'Create Joomla extension zip installation files as workflow action'
 branding:
