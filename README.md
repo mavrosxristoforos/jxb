@@ -11,7 +11,7 @@ JXB allows you to build your extension, using specific instructions from a build
 
 ## Example usage
 
-    uses: mavrosxristoforos/jxb@v1.0
+    uses: mavrosxristoforos/jxb@1.0
       with:
         build-file: 'build.jxb'
 
