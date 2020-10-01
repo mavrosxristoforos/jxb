@@ -23,7 +23,7 @@
     "@actions/io": "^1.0.1",
     "folder-zip-sync": "^1.0.5",
     "jszip": "^3.2.2",
-    "minimist": "^1.2.0",
+    "minimist": "^1.2.3",
     "path": "^0.12.7"
   }
 }
