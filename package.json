@@ -1,6 +1,6 @@
 {
   "name": "jxb",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Joomla Extension Building Action",
   "main": "index.js",
   "scripts": {
