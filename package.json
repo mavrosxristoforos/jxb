@@ -18,12 +18,12 @@
   },
   "homepage": "https://github.com/mavrosxristoforos/jxb#readme",
   "dependencies": {
-    "@actions/core": "^1.9.1",
-    "@actions/github": "^1.1.0",
-    "@actions/io": "^1.0.1",
+    "@actions/core": "^1.10.1",
+    "@actions/github": "^6.0.0",
+    "@actions/io": "^1.1.3",
     "folder-zip-sync": "^1.0.5",
-    "jszip": "^3.8.0",
-    "minimist": "^1.2.6",
+    "jszip": "^3.10.1",
+    "minimist": "^1.2.8",
     "path": "^0.12.7"
   }
 }
