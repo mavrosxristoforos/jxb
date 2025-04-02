@@ -87,9 +87,20 @@ class JXBCommand {
     var result = true;
     // Create a temporary directory
     result = result && await this.mkdir('.jxbTmpDir');
-    // Copy all files in that directory
+    // Copy all files while preserving directory structure
     for (var i = 1; i < args.length; i++) {
-      result = result && await this.copy(args[i], '.jxbTmpDir/'+path.basename(args[i]));
+      let relativePath = args[i]; // Original provided path
+      let destinationPath = path.join('.jxbTmpDir', relativePath); // Preserve full structure
+      let parentDir = path.dirname(destinationPath);
+      // Ensure all parent directories exist by creating them step by step
+      let parts = parentDir.split(path.sep);
+      let currentPath = '';
+      for (let part of parts) {
+        currentPath = path.join(currentPath, part);
+        result = result && await this.mkdir(currentPath);
+      }
+      // Copy file into its correct location
+      result = result && await this.copy(args[i], destinationPath);
     }
     // Zip that directory with the desired file name.
     result = result && await this.zipdir('.jxbTmpDir', args[0]);

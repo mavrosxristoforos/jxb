@@ -3,6 +3,9 @@ MKDIR:test-dir
 COPY:index.js test-dir/index2.js
 RENAME:test-dir/index2.js test-dir/index.js
 ZIPDIR:test-dir
-ZIPFILES:pkg.zip test-dir.zip action.yml
+MKDIR:test-dir2
+COPY:index.js test-dir2/index3.js
+ZIPFILES:pkg.zip test-dir.zip test-dir2/index3.js action.yml
 DELETE:test-dir
+DELETE:test-dir2
 DELETE:test-dir.zip
